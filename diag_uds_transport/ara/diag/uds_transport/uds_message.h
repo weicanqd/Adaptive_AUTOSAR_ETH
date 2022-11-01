@@ -131,6 +131,13 @@ protected:
    */
   virtual Address GetTaType() const noexcept;
 };
+/**
+ * @brief: This is the unique_ptr for constant UdsMessages containing a custom
+ *         deleter as provided by the generic/core DM part towards the UDS-Plugin.
+ * @attention: SWS_DM_00452
+ */
+using UdsMessageConstPtr = std::unique_ptr<UdsMessage, std::function<void(UdsMessage*)>>;
+
 } // namespace uds_transport
 } // namespace diag
 } // namespace ara
