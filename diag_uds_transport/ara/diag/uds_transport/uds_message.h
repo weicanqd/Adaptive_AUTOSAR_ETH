@@ -138,6 +138,13 @@ protected:
  */
 using UdsMessageConstPtr = std::unique_ptr<UdsMessage, std::function<void(UdsMessage*)>>;
 
+/**
+ * @brief: This is unique_ptr for UdsMessage containing a customer deleter as
+ *         provided by the generic/core DM part towards the UdsTransportLayer-Plugin.
+ * @attention: SWS_DM_00303
+ */
+using UdsMessagePtr = std::unique_ptr<UdsMessage, std::function<void(UdsMessage*)>>;
+
 } // namespace uds_transport
 } // namespace diag
 } // namespace ara

@@ -14,10 +14,62 @@
 namespace ara {
 namespace diag {
 namespace uds_transport {
+
+/**
+ * @attention: SWS_DM_00306
+ */
 class UdsTransportProtocolMgr {
 public:
+
+  /**
+   * @brief: Type to tuple to pack UdsTransportProtocolHandlerId and ChannelId
+   *         together, to form a global unique identifier of a UdsTransport
+   *         Protocol channel.
+   * @attention: SWS_DM_09021
+   */
   using GlobalChannelIdentifier =
       std::tuple<UdsTransportProtocolHandlerID, ChannelID>;
+
+  /**
+   * @attention: SWS_DM_00384
+   */
+  enum class IndicationResult : std::uint8_t {
+    kIndicationOK = 0,
+    kIndicationOccupied = 1,
+    kIndicationOverflow = 2,
+  };
+
+  /**
+   * @attention: SWS_DM_00307
+   */
+  enum class TransmissionResult : std::uint8_t {
+    kTransmitOk = 0,
+    kTransmitFailed = 1,
+  };
+
+  /**
+   * @brief: Notification call from the given transport channel, that is has
+   *         been reestablished since the last (Re)start from the
+   *         UdsTransportProtocolHandler to which this channel belongs.
+   *         To active this notification a previous call to NotifyReestablishment()
+   *         has to be done.
+   * @param globalChannelId : transport protocol channel, which is available again.
+   * @attention: SWS_DM00313
+   */
+  virtual void ChannelReestablished (GlobalChannelIdentifier globalChannelId) = 0;
+
+  /**
+   * @brief : Hands over a valid received message(currently this is only a
+   *          request type) from transport layer to session layer. It corresponds
+   *          to T_Data.ind of Figure 2 from ISO 14299-2. The behavior is
+   *          asynchronously. I.e. the UdsMessage is handled over to Session
+   *          Layer and it is expected, that it "instantly" returns, which means,
+   *          the real processing of the message shall be done asynchronously.
+   * @param message : The UDS message ptr with the request. Ownership of the
+   *                  UdsMessage is given back to the generic DM core here.
+   * @attention: SWS_DM_00311
+   */
+  virtual void HandleMessage(UdsMessagePtr message) = 0;
 
   /**
    * @brief                 Indicates a message start. This is an interface,
