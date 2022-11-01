@@ -7,6 +7,8 @@
 #ifndef CYY_AP_PROTOCOL_TYPES_H
 #define CYY_AP_PROTOCOL_TYPES_H
 
+#include <cstdint>
+
 namespace ara {
 namespace diag {
 namespace uds_transport {
@@ -20,6 +22,11 @@ using Priority = std::uint8_t;
 using ProtocolKind = core::String;
 
 using UdsTransportProtocolHandlerID = std::uint8_t;
+
+using Priority = std::uint8_t;
+
+using ProtocolKind = core::String;
+
 } // namespace uds_transport
 } // namespace diag
 } // namespace ara
