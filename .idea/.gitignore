@@ -2,6 +2,7 @@
 /shelf/
 /workspace.xml
 *.xml
+my_ap.iml
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
