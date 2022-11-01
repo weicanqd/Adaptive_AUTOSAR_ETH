@@ -116,8 +116,38 @@ public:
    * @param handlerId: Indication, which plugin stopped.
    * @attention: SWS_DM_00314
    */
-  virtual void HandlerStopped(
-      UdsTransportProtocolHandlerID handlerId
+  virtual void HandlerStopped(UdsTransportProtocolHandlerID handlerId) = 0;
+
+  /**
+   * @brief: Indicates, that the message indicate via IndicateMessage() has
+   *         failure and will not lead to a final HandleMessage() call.
+   * @param message : The pointer to UdsMessage handed back over to the session layer.
+   * @attention: SWS_DM_00310
+   */
+  virtual void NotifyMessageFailure(UdsMessagePtr message) = 0;
+
+  /**
+   * @brief: Notification about the outcome of a transmit request called by core
+   *         DM at the handler via UdsTransportProtocolHandler::Transmit().
+   * @param message : For which message created in IndicateMessage()
+   * @param result  : Result of the transmission. In case UDS message could be
+   *                  transmitted on network layer.
+   * @attention: SWS_DM_00312
+   */
+  virtual void TransmitConfirmation(UdsMessageConstPtr message,
+                                    TransmissionResult result) = 0;
+  /**
+   * @brief: Confirmation of sent messages and number.
+   * @param messages             : The same ordered list of messages previously
+   *                               passed to UdsTransportProtocolPeriodicHandler::
+   *                               PeriodicTransmit.
+   * @param numberOfSentMessages : The number of successfully sent messages from
+   *                               the "messages" list.
+   * @attention: SWS_DM_01069
+   */
+  virtual void PeriodicTransmitConfirmation(
+      ara::core::Vector<UdsMessageConstPtr> messages,
+      std::size_t numberOfSentMessages
       ) = 0;
 };
 } // namespace uds_transport
