@@ -43,6 +43,7 @@ public:
    * @return                Pair of IndicationResult and pointer to UDS message
    *                        owned/created by DM core and returned to the handler
    *                        to get filled.
+   * @attention: SWS_DM_00309
    */
   virtual auto
   IndicateMessage(ara::diag::uds_transport::UdsMessage::Address sourceAddr,
@@ -54,6 +55,18 @@ public:
                   ara::diag::uds_transport::ProtocolKind protocolKind,
                   ara::core::Span<const std::uint8_t> payloadInfo)
       -> std::pair<IndicationResult, UdsMessagePtr> = 0;
+
+  /**
+   * @brief Notification from handler, that it has stopped now(e.g. closed down
+   *        network connections, freed resources, etc...)
+   *        This callback is expected as a reaction from handler to a call to
+   *        UdsTransportProtocolHandler::Stop.
+   * @param handlerId: Indication, which plugin stopped.
+   * @attention: SWS_DM_00314
+   */
+  virtual void HandlerStopped(
+      UdsTransportProtocolHandlerID handlerId
+      ) = 0;
 };
 } // namespace uds_transport
 } // namespace diag
