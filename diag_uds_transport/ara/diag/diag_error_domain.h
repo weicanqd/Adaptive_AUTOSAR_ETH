@@ -176,7 +176,12 @@ enum class DiagOfferErrc : ara::core::ErrorDomain::CodeType {
 constexpr ara::core::ErrorCode MakeErrorCode(DiagOfferErrc code,
                                              ara::core::ErrorDomain::SupportDataType data) noexcept;
 
-class DiagOfferErrorDomain {
+/**
+ * @brief: Error domain for diagnostic errors.
+ * @uniqueID: 0x8000000000000403
+ * @attention: SWS_DM_00989
+ */
+class DiagOfferErrorDomain final : public ErrorDomain {
   /**
   * @brief: Alias for the exception base class.
   * @attention: SWS_DM_00991
@@ -203,6 +208,19 @@ class DiagOfferErrorDomain {
    * @attention: SWS_DM_00994
    */
   const char* Message(ara::core::ErrorDomain::CodeType errorCode) const noexcept override;
+
+  /**
+   * @brief: Return the shortname ApApplicationErrorDomain.SN of this error domain
+   * @return : const char*
+   * @attention: SWS_DM_00993
+   */
+  const char* Name() const noexcept override;
+
+  /**
+   * @brief: Default constructor
+   * @attention: SWS_DM_00992
+   */
+  constexpr DiagOfferErrorDomain() noexcept;
 };
 
 
