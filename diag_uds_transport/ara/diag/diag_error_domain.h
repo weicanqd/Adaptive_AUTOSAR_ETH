@@ -102,7 +102,110 @@ class DiagErrorDomain final : public ErrorDomain {
    */
   using Exception = DiagException;
 
+  /**
+   * @brief: Default constructor.
+   * @attention: SWS_DM_00520
+   */
+  constexpr DiagErrorDomain() noexcept;
+
+  /**
+   * @brief: Return the shortname ApApplicationErrorDomain.SN of this domain.
+   * @return const char* : Diag name
+   * @attention: SWS_DM_00521
+   */
+  const char* Name() const noexcept override;
+
+  /**
+   * @brief: Translate an error code value into a test message.
+   * @param errorCode : the error code value
+   * @return const char* : the test message, should never null ptr
+   * @attention: SWS_DM_00522
+   */
+  const char* Message(
+      ara::core::ErrorDomain::CodeType errorCode ) const noexcept override;
+
+  /**
+   * @brief: Throw the exception type corresponding to the given ErrorCode.
+   * @param errorCode : the ErrorCode instance
+   * @attention: SWS_DM_00523
+   */
+  void ThrowAsException(const ara::core::ErrorCode &errorCode) const noexcept(false) override;
+
+  /**
+   * @brief: Obtain the reference to the signal global DiagErrorDomain with the
+   *         given support data type.
+   * @attention: SWS_DM_00524
+   */
+  constexpr const ara::core::ErrorDomain& GetDiagDomain() noexcept;
+
+  /**
+   * @brief: Create a new ErrorCode for DiagError Domain with the given support data type.
+   * @param: code : an enumeration value from future_errc.
+   * @param: data : a vendor-defined supplementary value.
+   * @return: ErrorCode: the new ErrorCode instance.
+   * @attention: SWS_DM_00525
+   */
+  constexpr ara::core::ErrorCode MakeErrorCode(DiagErrc code,
+                                               ara::core::ErrorDomain::SupportDataType data) noexcept;
+
 };
+
+/**
+ * @brief: The DiagOfferErrc enumeration defines the error codes for the DiagOffer ErrorDomain.
+ * @attention: SWS_DM_00599
+ */
+enum class DiagOfferErrc : ara::core::ErrorDomain::CodeType {
+  /* The service is already offered */
+  kAlreadyOffered = 101,
+
+  /* monitor configuration dose not match dext */
+  kConfigurationMismatch = 102,
+
+  /* monitor debouncing configuration invalid, e.g. passed threshold larger failed
+   * threshold...*/
+  kDebouncingConfigurationInconsistent = 103,
+};
+
+/**
+ * @brief: Create a new ErrorCode for DiagOfferErrorDomain with the given support DataType.
+ * @param: code : an enumeration value from future_errc
+ * @param: data : a vendor_defined supplementary value
+ * @return: ara::core::ErrorCode : the new ErrorCode instance
+ * @attention: SWS_DM_01005
+ */
+constexpr ara::core::ErrorCode MakeErrorCode(DiagOfferErrc code,
+                                             ara::core::ErrorDomain::SupportDataType data) noexcept;
+
+class DiagOfferErrorDomain {
+  /**
+  * @brief: Alias for the exception base class.
+  * @attention: SWS_DM_00991
+  */
+  using Exception = DiagException;
+
+  /**
+  * @brief: Alias for the error code value enumeration.
+  * @attention: SWS_DM_00990
+  */
+  using Errc = DiagOfferErrc;
+
+  /**
+   * @brief: Throw the exception type corresponding to the given ErrorCode.
+   * @param errorCode
+   * @attention: SWS_DM_00995
+   */
+  void ThrowAsException(const ara::core::ErrorCode &errorCode) const noexcept(false) override;
+
+  /**
+   * @brief: Translate an error code value into a test message.
+   * @param errorCode : the error code value
+   * @return const char* : the test message, never nullptr
+   * @attention: SWS_DM_00994
+   */
+  const char* Message(ara::core::ErrorDomain::CodeType errorCode) const noexcept override;
+};
+
+
 
 } // namespace diag
 } // namespace ara
