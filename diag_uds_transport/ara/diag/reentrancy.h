@@ -127,6 +127,55 @@ class Monitor final {
   };
 };
 
+/**
+ * @brief: Represents the status information reported to AAs why the monitor may be re-initialized.
+ * @attention: SWS_DM_00540
+ */
+enum class InitMonitorReason : std::uint32_t {
+  /* Event was cleared and all internal values and states are reset */
+  kClear = 0x00,
+
+  /* Operation cycle of the event was (re-)started */
+  kRestart = 0x01,
+
+  /* Enable conditions are fulfilled and control DTC setting is set to on. */
+  kReenabled = 0x02,
+
+  /* Enable conditions no longer fulfilled, or Control DTC setting is set to off. */
+  kDisabled = 0x03,
+};
+
+/**
+ * @brief: Represents the status information reported by AAs being relevant for error monitoring
+ * @attention: SWS_DM_00541
+ */
+enum class MonitorAction : std::uint32_t {
+  /* Monitor reports qualified test result passed */
+  kPassed = 0x00,
+
+  /* Monitor reports qualified test result failed. */
+  kFailed = 0x01,
+
+  /* Monitor reports unqualified test result pre-passed. */
+  kPrepassed = 0x02,
+
+  /* Monitor reports unqualified test result pre-failed. */
+  kPrefailed = 0x03,
+
+  /* Monitor triggers the storage of ExtendedData Records and Freeze Frames
+   * (if the triggering condition is connected to this threshold). */
+  kFdcThresholdReached = 0x04,
+
+  /* Reset TestFailed Bit without any other side effects like readiness. */
+  kResetTestFailed = 0x05,
+
+  /* Freeze the internal debounce counter/timer. */
+  kFreezeDebouncing = 0x06,
+
+  /* Reset the internal debounce counter/timer. */
+  kResetDebouncing = 0x07,
+};
+
 }
 }
 
