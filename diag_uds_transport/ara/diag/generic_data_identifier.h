@@ -13,7 +13,22 @@
  */
 class GenericDataIdentifier {
 
+  /**
+   * @brief: Response data of positive respone message.
+   * @attention: SWS_DM_00641
+   */
+  struct OperationOutput {
 
+  };
+
+  /**
+   * @brief: Class of GenericDataIdentifier
+   * @param specifier : InstanceSpecifier to an PortPrototype of an DiagnosticDataIdentifierGenericInterface
+   * @param reentrancyType : specifies if interface is callable fully- or non-reentrant for reads, writes or both
+   * @attention: SWS_DM_00634
+   */
+  inline GenericDataIdentifier (const ara::core::InstanceSpecifier &specifier,
+                                DataIdentifierReentrancyType reentrancyType);
 };
 
 
