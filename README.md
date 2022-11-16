@@ -1,11 +1,21 @@
 # my_ap
 
-Learning and implementing AP AUTOSAR standards.
+Learning and implementing AP,CP AUTOSAR standards.
 
 If you like this project, please give me a star, Thanks!
 
 AUTOSAR AP R21-11
 
-E-mail: yiyang.cai@pm.me
+__E-mail: yiyang.cai@pm.me__
 
-Modules currently under development: DM, UDS_Transport
+### My PLAN
+__Modules currently under development:__ 
+1. UDS_Transport 
+2. someIP protocol
+
+__Plan to develop near future:__
+1. DoIP
+2. TCP/UDP
+
+### Key Feature List (Maybe...)
+1. someIP protocol serialization and deserialization
