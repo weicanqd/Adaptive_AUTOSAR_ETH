@@ -46,16 +46,22 @@ typedef enum someIP_Wire_Type_enum_t {
 typedef union someIP_wire_data_id_union_t {
   volatile uint16_t R;
   struct {
-    volatile uint8_t               unused_7     :1;
-    volatile someIP_Wire_Type_enum wire_type    :3;
-    volatile uint8_t               data_id_high :4;
     volatile uint8_t               data_id_low;
-  } B ;
+    volatile uint8_t               data_id_high :4;
+    volatile someIP_Wire_Type_enum wire_type    :3;
+    volatile uint8_t               unused_7     :1;
+  } B;
 } someIP_wire_data_id_union;
 
 typedef struct someIP_Tag_t {
   someIP_wire_data_id_union someIp_wire_data_id;
   uint8_t length_field[0];
 } someIP_Tag;
+
+/* ========================================================================== */
+/*                       Internal Data structure                              */
+/* ========================================================================== */
+
+
 
 #endif // CYY_AP_SOMEIP_SERIALIZATION_H

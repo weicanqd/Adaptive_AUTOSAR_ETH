@@ -55,7 +55,7 @@ typedef union someIP_MessageID_union_t {
 typedef struct someIP_RequestID_t {
   uint8_t  client_id_prefix;
   uint8_t  client_id;
-  uint16_t session_id
+  uint16_t session_id;
 } someIP_RequestID;
 
 typedef enum someIP_Message_Type_enum_t {
