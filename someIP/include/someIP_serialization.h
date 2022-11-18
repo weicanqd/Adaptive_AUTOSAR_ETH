@@ -42,6 +42,23 @@ typedef enum someIP_Wire_Type_enum_t {
 
 } someIP_Wire_Type_enum;
 
+typedef enum someIP_Data_Type_enum_t {
+  /* base data type */
+  BASE_8_BIT     = 0x00,
+  BASE_16_BIT    = 0x01,
+  BASE_32_BIT    = 0x02,
+  BASE_64_BIT    = 0x03,
+
+  /* static size: eg. define in ARXML */
+  STATIC_SIZE    = 0x04,
+
+  /* dynamic size */
+  DYNAMIC_1_BYTE = 0x05,
+  DYNAMIC_2_BYTE = 0x06,
+  DYNAMIC_4_BYTE = 0x07,
+
+} someIP_Data_Type_enum;
+
 /* CYY: DataID layout refer Figure4.6 */
 typedef union someIP_wire_data_id_union_t {
   volatile uint16_t R;
@@ -55,7 +72,6 @@ typedef union someIP_wire_data_id_union_t {
 
 typedef struct someIP_Tag_t {
   someIP_wire_data_id_union someIp_wire_data_id;
-  uint8_t length_field[0];
 } someIP_Tag;
 
 /* ========================================================================== */
