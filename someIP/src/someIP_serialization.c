@@ -214,8 +214,10 @@ static inline void someIP_data_processing(const uint8* tag,
 
     break;
   case WIRE_TYPE_COMPLEX_16BIT:
+    someIP_complex_16_bit_handle(tag, length_filed, result);
     break;
   case WIRE_TYPE_COMPLEX_32BIT:
+    someIP_complex_32_bit_handle(tag, length_filed, result);
     break;
   }
 }

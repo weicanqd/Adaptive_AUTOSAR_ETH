@@ -10,7 +10,7 @@
 /*                            Includes                                        */
 /* ========================================================================== */
 #include <stdint.h>
-
+#include "../../common/Std_Types.h"
 /* ========================================================================== */
 /*                       Data struct define                                   */
 /* ========================================================================== */
@@ -48,6 +48,7 @@ typedef struct someIP_EventID_t {
 } someIP_EventID;
 
 typedef union someIP_MessageID_union_t {
+  uint32 id;
   someIP_Method  method_id;
   someIP_EventID event_id;
 } someIP_MessageID_union;
@@ -57,6 +58,11 @@ typedef struct someIP_RequestID_t {
   uint8_t  client_id;
   uint16_t session_id;
 } someIP_RequestID;
+
+typedef union someIP_RequestID_union_t {
+  uint32 id;
+  someIP_RequestID someIP_Request_id;
+} someIP_RequestID_union;
 
 typedef enum someIP_Message_Type_enum_t {
   /* A request expecting a response */
@@ -92,10 +98,10 @@ typedef enum someIP_Message_Type_enum_t {
 
 typedef enum someIP_Return_Codes_enum_t {
   /* No error occurred */
-  E_OK = 0x00,
+  E_OK_SOMEIP = 0x00,
 
   /* An unspecified error occurred */
-  E_NOT_OK = 0x01,
+  E_NOT_OK_SOMEIP = 0x01,
 
   /* The request Service ID is unknown */
   E_UNKNOWN_SERVICE = 0x02,
@@ -159,13 +165,13 @@ typedef enum someIP_Return_Codes_enum_t {
  */
 typedef struct someIP_Header_t {
   /* CYY: message id may use to identify a rpc call to a method, or an event. */
-  someIP_MessageID_union*    messageID;
+  someIP_MessageID_union     messageID;
 
   /* CYY: length should contain the length in BYTE starting from Request ID to the end. */
   Length_Type                length;
 
   /* CYY: request ID[32] = Client ID Prefix[8] + Client ID[8] + Session ID[16] */
-  someIP_RequestID*          requestID;
+  someIP_RequestID_union     requestID;
   Protocol_Version_Type      protocol_Version;
   Interface_Version_Type     interface_Version;
   someIP_Message_Type_enum   message_type;
