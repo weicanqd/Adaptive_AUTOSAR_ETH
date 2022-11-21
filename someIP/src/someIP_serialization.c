@@ -5,10 +5,18 @@
 */
 
 #include "../include/someIP_serialization.h"
-#include "../../common/Std_Types.h"
-#include "../include/someIP_serialization_cfg.h"
-#include <stdio.h>
+#include "stdlib.h"
+#include "memory.h"
+#pragma clang diagnostic push
+/* ========================================================================== */
+/*                            Global Variables                                */
+/* ========================================================================== */
+someIP_deserialized_result* someIP_deserialized_struct_buffer[1000] = {0};
+uint32 index_for_deserialized_struct_buffer = 0;
 
+/* ========================================================================== */
+/*                       Static function definition                           */
+/* ========================================================================== */
 static inline void someIP_deserialize_wire_type_data_Id(const uint8* input, someIP_Tag* tag) {
 
   /* mapping input array to wire_data_id type */
@@ -107,12 +115,114 @@ static inline void someIP_get_length_field(const someIP_Data_Type_enum length_ty
   }
 }
 
-static inline void someIP_print(const uint8* buffer, uint32 length) {
+static inline void someIP_print(const uint8* buffer,
+                                uint32 length,
+                                const someIP_Tag* tag,
+                                uint16 data_id,
+                                uint32 length_field) {
+
+  printf("wire_type: 0x%02x\n", tag->someIp_wire_data_id.B.wire_type);
+
+  printf("data id: 0x%04x\n", data_id);
+
+  printf("length_field: 0x%04lx\n", length_field);
+
   for (uint32 i = 0; i < length; i++) {
     printf("%ld: 0x%02x\n", i, buffer[i]);
   }
     printf("\n");
 }
+
+static inline void someIP_complex_8_bit_handle(const uint8* tag,
+                                               const uint32 length_filed,
+                                               someIP_deserialized_result* result){
+  someIP_deserialized_struct_buffer[index_for_deserialized_struct_buffer]->data_ptr
+      = (uint32*)malloc(length_filed * sizeof (uint8));
+
+  memcpy(someIP_deserialized_struct_buffer[index_for_deserialized_struct_buffer]->data_ptr,
+         tag,
+         length_filed);
+}
+
+static inline void someIP_complex_16_bit_handle(const uint8* tag,
+                                               const uint32 length_filed,
+                                               someIP_deserialized_result* result){
+  someIP_deserialized_struct_buffer[index_for_deserialized_struct_buffer]->data_ptr
+      = (uint32*)malloc(length_filed * sizeof (uint8));
+
+  memcpy(someIP_deserialized_struct_buffer[index_for_deserialized_struct_buffer]->data_ptr,
+         tag,
+         length_filed);
+}
+
+static inline void someIP_complex_32_bit_handle(const uint8* tag,
+                                                const uint32 length_filed,
+                                                someIP_deserialized_result* result){
+  someIP_deserialized_struct_buffer[index_for_deserialized_struct_buffer]->data_ptr
+      = (uint32*)malloc(length_filed * sizeof (uint8));
+
+  memcpy(someIP_deserialized_struct_buffer[index_for_deserialized_struct_buffer]->data_ptr,
+         tag,
+         length_filed);
+}
+
+static inline void someIP_data_processing(const uint8* tag,
+                                          const uint32 length_filed,
+                                          const uint16 data_id,
+                                          const someIP_Wire_Type_enum wire_type){
+
+  /* result struct will store the deserialized result */
+  someIP_deserialized_result* result = (someIP_deserialized_result*)
+                                        malloc(sizeof(someIP_deserialized_result));
+
+  uint32* target_data = NULL;
+
+  result->data_id = data_id;
+  result->wire_type = wire_type;
+
+  switch (wire_type) {
+
+  case WIRE_TYPE_8_BIT:
+    target_data = (uint32 *)malloc(sizeof(uint32));
+    *target_data = tag[0];
+    result->data_ptr = target_data;
+
+    someIP_deserialized_struct_buffer[index_for_deserialized_struct_buffer] = result;
+    break;
+  case WIRE_TYPE_16_BIT:
+    target_data = (uint32*)malloc(sizeof(uint32));
+    *target_data = ((tag[0] << 8) | tag[1]);
+    result->data_ptr = target_data;
+
+    someIP_deserialized_struct_buffer[index_for_deserialized_struct_buffer] = result;
+    break;
+  case WIRE_TYPE_32_BIT:
+    target_data = (uint32*)malloc(sizeof(uint32));
+    *target_data = ((tag[0] << 24) | (tag[1] << 16) | (tag[2] << 8) | (tag[3]));
+    result->data_ptr = target_data;
+
+    someIP_deserialized_struct_buffer[index_for_deserialized_struct_buffer] = result;
+    break;
+  case WIRE_TYPE_64_BIT:
+    /* Will add in the future */
+    break;
+  case WIRE_TYPE_COMPLEX_STATIC:
+    /* Will add in the future */
+    break;
+  case WIRE_TYPE_COMPLEX_8BIT:
+    someIP_complex_8_bit_handle(tag, length_filed, result);
+
+    break;
+  case WIRE_TYPE_COMPLEX_16BIT:
+    break;
+  case WIRE_TYPE_COMPLEX_32BIT:
+    break;
+  }
+}
+
+/* ========================================================================== */
+/*                             Function definition                            */
+/* ========================================================================== */
 
 void someIP_deserializing(uint8* input) {
   Std_ReturnType        return_value  = E_NOT_OK;
@@ -136,31 +246,44 @@ void someIP_deserializing(uint8* input) {
   /* 2. Mapping wire type and length*/
   return_value = someIP_length_mapping(&tag, &length_type);
 
-  printf("wire_type: 0x%02x\n", tag.someIp_wire_data_id.B.wire_type);
-
-  printf("data type: %d\n", length_type);
-  printf("data id: 0x%04x\n", data_id);
-
   /* 3. Get length_filed based wire type
    * CYY: suppose no padding bits here */
   if (return_value == E_OK) {
     someIP_get_length_field(length_type, &index_for_length, &index_for_data, &length_field, &input[index_for_tag]);
   }
 
-  printf("length_field: 0x%04lx\n", length_field);
-  someIP_print(&input[index_for_data], length_field);
+  someIP_print(&input[index_for_data], length_field, &tag, data_id, length_field);
+
+  /* 4. Data processing */
+  someIP_data_processing(&input[index_for_data], length_field, data_id, wire_type);
+  index_for_deserialized_struct_buffer++;
 }
+
 
 
 
 int main() {
 
-//  someIP_deserializing(input_wire_type_0);
-//  someIP_deserializing(input_wire_type_1);
-//  someIP_deserializing(input_wire_type_2);
-//  someIP_deserializing(input_wire_type_3);
-  someIP_deserializing(input_wire_type_5);
-  someIP_deserializing(input_wire_type_6);
-  someIP_deserializing(input_wire_type_7);
+  someIP_deserializing(input_8_bit_base);
+
+  someIP_deserializing(input_16_bit_base);
+
+  someIP_deserializing(input_32_bit_base);
+
+
+#pragma clang diagnostic ignored "-Wformat"
+  for (int i = 0; i < index_for_deserialized_struct_buffer; i++) {
+    printf("data result: 0x%x\n", *someIP_deserialized_struct_buffer[i]->data_ptr);
+  }
+
+
+
+
+
   return 0;
 }
+#pragma clang diagnostic pop
+
+/* ========================================================================== */
+/*                              End Of File                                   */
+/* ========================================================================== */

@@ -11,6 +11,9 @@
 /*                            Includes                                        */
 /* ========================================================================== */
 #include "someIP.h"
+#include "../../common/Std_Types.h"
+#include "../include/someIP_serialization_cfg.h"
+#include <stdio.h>
 /* ========================================================================== */
 /*                       Data struct define                                   */
 /* ========================================================================== */
@@ -78,6 +81,10 @@ typedef struct someIP_Tag_t {
 /*                       Internal Data structure                              */
 /* ========================================================================== */
 
-
+typedef struct someIP_deserialized_result_t {
+  uint16 data_id;
+  someIP_Wire_Type_enum wire_type;
+  uint32* data_ptr;
+} someIP_deserialized_result;
 
 #endif // CYY_AP_SOMEIP_SERIALIZATION_H
