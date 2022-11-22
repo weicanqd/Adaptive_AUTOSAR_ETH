@@ -8,6 +8,11 @@ AUTOSAR AP R21-11
 
 __E-mail: yiyang.cai@pm.me__
 
+## FOCUS ON
+1. someIP, someIP/SD
+2. data struct definition.
+3. learn note....
+
 ### My PLAN
 __Modules currently under development:__ 
 1. UDS_Transport 
