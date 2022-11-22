@@ -18,4 +18,4 @@ __Plan to develop near future:__
 2. TCP/UDP
 
 ### Key Feature List (Maybe...)
-1. someIP protocol serialization and deserialization
+1. someIP, someIP/SD...
