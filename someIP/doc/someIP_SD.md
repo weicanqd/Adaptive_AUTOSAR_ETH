@@ -58,4 +58,35 @@
    4. port number:
       1. server: port provided by corresponding event-group from client.
       2. client: port provided by corresponding event-group from server.
-   
+6. IPV4 SD Endpoint Option
+   1. ![img_7.png](img_7.png)
+7. IPV6 SD Endpoint Option
+   1. ![img_8.png](img_8.png)
+
+### 2.4 Service Entries
+1. Find Service Entry
+   1. the find service entry shall be used for finding service instances and shall only be sent if the current state of a service is unknown.
+   2. entry field:
+      1. type = 0x00 find service
+      2. instance id = 0xFFFF
+      3. major version = 0xFF
+      4. minor Version = 0xFFFFFFFF
+      5. TTL = 0x00000000 = stop, TTL = 0xFFFFFFFF = considered valid until next reboot.
+2. Offer Service Entry
+   1. The offer service entry type shall be used to offer a service to other communication partners.
+   2. entry field:
+      1. type = 0x01 offer service
+      2. service id, instance id, major version, minor version, shall be set to the service instance that is offered.
+   3. offer service entries shall always reference either an IPV4 or IPV6 endpoint option to signal how the service is reachable.
+3. Stop Offer Entry
+   1. the stop offer entry type shall be used to stop offering service instances.
+   2. entry field:
+      1. all same as offer entry.
+      2. TTL = 0x00000000.
+
+### 2.5 Service Endpoints
+1. The referenced endpoint options of the offer service entries denotes the :
+   1. IP Address and Port Numbers the service instance is reachable at the server.
+   2. IP Address and Port Numbers the service instance sends the events from.
+2. Event Group Endpoints
+   1. The endpoint option

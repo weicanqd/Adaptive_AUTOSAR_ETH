@@ -132,9 +132,21 @@ someIP_SD_option_format IPV4_multicast_option = {
     .discardable_flag = 0,
 };
 
+someIP_SD_option_format IPV4_SD_endpoint_option = {
+    .length           = 0x0009,
+    .type             = 0x24,
+    .discardable_flag = 0,
+};
+
 someIP_SD_option_format IPV6_endpoint_option = {
     .length           = 0x0015,
     .type             = 0x06,
+    .discardable_flag = 0,
+};
+
+someIP_SD_option_format IPV6_SD_endpoint_option = {
+    .length           = 0x0015,
+    .type             = 0x26,
     .discardable_flag = 0,
 };
 
