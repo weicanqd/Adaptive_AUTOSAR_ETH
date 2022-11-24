@@ -89,4 +89,20 @@
    1. IP Address and Port Numbers the service instance is reachable at the server.
    2. IP Address and Port Numbers the service instance sends the events from.
 2. Event Group Endpoints
-   1. The endpoint option
+
+### 2.6 Example
+![img_9.png](img_9.png)
+1. SOMEIP/SD Server -> Client: offer service
+2. SOMEIP/SD Client -> Server: [OPEN TCP] TCP.SYN()
+3. SOMEIP/SD Server -> Client: [OPEN TCP] TCP.SYNC/ACK()
+4. SOMEIP/SD Client -> Server: [OPEN TCP] TCP.ACK()
+5. SOMEIP/SD Client -> Server: send a subscribe event group 
+6. SOMEIP/SD Server -> Client: response ACK of subscribe event group
+7. NOW CLIENT SUBSCRIBES.
+8. SOMEIP Server -> Client: UDP initial, TCP initial
+9. SOMEIP Client -> Server: method call
+   1. FOR UDP: server unicast  <===> client unicast
+   2. FOR TCP: server TCP <===> client TCP
+
+### 2.7 state machine
+![img_10.png](img_10.png)
